@@ -1,16 +1,32 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+interface IFetch {
+  status: number;
+  data: [];
+}
+
+interface IStateInitial {
+  postList: {
+    status: string;
+    data: object;
+    error: object;
+  };
+}
+
+interface IPayload {
+  payload: {};
+}
+
 export const fetchPostList = createAsyncThunk(
   "",
 
   async () => {
     const fetchData = await axios(
       "https://my-json-server.typicode.com/PedagogiaDHBrasil/ctd-esp-front2-aula6-mesa3/posts"
-    ).then((response) => {
+    ).then((response: IFetch) => {
       if (response.status !== 200) {
-        console.error("Erro");
-        return {};
+        console.log("Erro");
       } else {
         console.log("Succeso");
         return response.data;
@@ -22,7 +38,7 @@ export const fetchPostList = createAsyncThunk(
 );
 
 // State inicial
-const postInitialState = {
+const postInitialState: IStateInitial = {
   postList: {
     status: "inativo",
     data: {},
@@ -37,7 +53,7 @@ const postSlice = createSlice({
 
   // Async reducers
   extraReducers: {
-    [fetchPostList.pending.type]: (state) => {
+    [fetchPostList.pending.type]: (state: IStateInitial) => {
       state.postList = {
         status: "carregando",
         data: {},
@@ -45,7 +61,10 @@ const postSlice = createSlice({
       };
     },
 
-    [fetchPostList.fulfilled.type]: (state, action) => {
+    [fetchPostList.fulfilled.type]: (
+      state: IStateInitial,
+      action: IPayload
+    ) => {
       state.postList = {
         status: "sucesso",
         data: action.payload,
@@ -53,7 +72,7 @@ const postSlice = createSlice({
       };
     },
 
-    [fetchPostList.rejected.type]: (state, action) => {
+    [fetchPostList.rejected.type]: (state: IStateInitial, action: IPayload) => {
       state.postList = {
         status: "erro",
         data: {},
