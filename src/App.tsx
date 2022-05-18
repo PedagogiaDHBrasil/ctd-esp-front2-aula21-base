@@ -1,10 +1,24 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPostList } from "./redux/post.jsx";
+import { fetchPostList } from "./redux/post.tsx";
+
+interface IData {
+  title: string;
+}
+
+interface IPostList {
+  state: string;
+  post: string;
+  status: string;
+  data: [];
+  postList: [];
+}
 
 const App = () => {
   const dispatch = useDispatch();
-  const postList = useSelector((state) => state.post.postList);
+
+  let postList: IPostList;
+  postList = useSelector((state: IPostList) => state.post.postList);
 
   return (
     <div>
@@ -16,28 +30,28 @@ const App = () => {
         Buscar posts
       </button>
 
-      {postList.status === "inativo" ? (
+      {postList?.status === "inativo" ? (
         <p className="inativo mensagem">API status: {postList.status}</p>
       ) : null}
 
-      {postList.status === "carregando" ? (
+      {postList?.status === "carregando" ? (
         <p className="carregando mensagem">API status: {postList.status}</p>
       ) : null}
 
-      {postList.status === "sucesso" ? (
+      {postList?.status === "sucesso" ? (
         <p className="sucesso mensagem">API status: {postList.status}</p>
       ) : null}
 
-      {postList.status === "erro" ? (
+      {postList?.status === "erro" ? (
         <p className="erro mensagem">API status: {postList.status}</p>
       ) : null}
 
       <article>
-        {postList.status !== "carregando" &&
-          postList.data.length &&
-          postList.data.map((post, key) => (
+        {postList?.status !== "carregando" &&
+          postList?.data.length &&
+          postList?.data.map(({ title }: IData, key: number) => (
             <h3 key={key}>
-              <b>Título:</b> {post.title}
+              <b>Título:</b> {title}
             </h3>
           ))}
       </article>
