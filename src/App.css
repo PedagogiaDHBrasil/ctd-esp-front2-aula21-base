@@ -1,0 +1,15 @@
+body {
+  background-color: whitesmoke;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+#caixaDeEntrada {
+  display: flex;
+  border: 2px solid black;
+  border-radius: 12px;
+  background-color: wheat;
+}
